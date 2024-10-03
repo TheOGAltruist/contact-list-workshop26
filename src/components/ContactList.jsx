@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContactRow from "./ContactRow";
 
 const dummyContacts = [
@@ -8,25 +8,42 @@ const dummyContacts = [
     { id: 3, name: "BB-8", phone: "888-888-8888", email: "bb8@droids.com" },
   ];
 
-export default function ContactList() { 
-    const [contacts, setContacts] = useState(dummyContacts)    
+export default function ContactList({setSelectedContactId}) { 
+    const [contacts, setContacts] = useState(dummyContacts)
+
+    useEffect(() => {
+        async function fetchContacts() {
+            try {
+                      const response = await fetch("https://fsa-jsonplaceholder-69b5c48f1259.herokuapp.com/users",{
+                        method: "GET"
+                      });
+
+                      const results = await response.json();
+                      setContacts(results);
+            } catch (error) {
+                console.error(error)
+            }
+        };
+
+        fetchContacts();
+    },[])
+
     return ( 
           <table>
             <thead>
-              <tr>
-                <th colSpan="3">Contact List</th>
-              </tr>
+                <tr>
+                    <th colSpan="3">Contact List</th>
+                </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Name</td>
-                <td>Email</td>
-                <td>Phone</td>
-              </tr>
-                {dummyContacts.map((dummyContact, idx) => {
-                        console.log(dummyContact);
-                        
-                        return <ContactRow name={dummyContact.name} email={dummyContact.email} phone={dummyContact.phone} key={idx}/>
+                <tr>
+                    <td>Name</td>
+                    <td>Email</td>
+                    <td>Phone</td>
+                </tr>
+                {
+                    contacts.map((contact, idx) => {
+                        return <ContactRow setSelectedContactId={setSelectedContactId} props={contact} key={idx}/>
                     })
                 }
             </tbody>
