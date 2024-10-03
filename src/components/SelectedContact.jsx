@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const SelectedContact = ({selectedContactId, fetchContacts}) => {
+const SelectedContact = ({selectedContactId, setSelectedContactId}) => {
     const [contact, setContact] = useState({})
 
     useEffect(()=>{
@@ -31,6 +31,7 @@ const SelectedContact = ({selectedContactId, fetchContacts}) => {
             <span>Username: {contact.username}</span><br/>
             <span>Website: {contact.website}</span><br/>
             <span>Company Name: {contact.company?.name}</span><br/>
+            <button onClick={() => {setSelectedContactId(null)}}>Go Back</button>
         </div>
       </>
      );
